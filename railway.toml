@@ -1,0 +1,2 @@
+[deploy]
+startCommand = "python -u agent.py start"
