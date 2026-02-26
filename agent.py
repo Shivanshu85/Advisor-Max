@@ -35,8 +35,8 @@ logger = logging.getLogger("outbound-agent")
 OUTBOUND_TRUNK_ID = os.getenv("OUTBOUND_TRUNK_ID")
 SIP_DOMAIN = os.getenv("VOBIZ_SIP_DOMAIN") 
 DEFAULT_PRO_GREETING = (
-    "Hello, good day. This is the Vobiz assistant calling. "
-    "May I confirm I am speaking with the right person?"
+    "Namaste. Main AdvisorMax se bol raha hoon. "
+    "Aap kis shehar ya location mein zameen kharidna chahte hain?"
 )
 DEFAULT_PROPERTY_CSV_PATH = r"c:\Users\tshiv\Downloads\pan_india_property_listings_2025.csv"
 
@@ -267,7 +267,7 @@ class OutboundAssistant(Agent):
 
         super().__init__(
             instructions="""
-            You are a professional real-estate outbound calling agent from Vobiz.
+            You are AdvisorMax, an Indian real-estate AI calling agent.
             
             Key behaviors:
             1. Speak clearly, politely, and confidently in a real-estate sales tone.
@@ -276,7 +276,11 @@ class OutboundAssistant(Agent):
             4. Ask qualification questions one by one: city/locality, budget, BHK, buy vs rent, possession timeline.
             5. Suggest only relevant listings and summarize benefits in plain language.
             6. If the user is not interested, close respectfully without pressure.
-            7. If asked, explain you are an AI assistant from Vobiz helping with real-estate discovery.
+            7. If asked, explain you are AdvisorMax, an AI assistant helping with real-estate discovery.
+            8. Be Indian-language ready: if the caller speaks Hindi, Bengali, Telugu, Marathi, Tamil,
+               Urdu, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese, or any other Indian language,
+               immediately respond in that same language.
+            9. If language is unclear, ask one short preference question and continue in the user's chosen language.
             """ + extra_catalog_rules
         )
 
@@ -359,7 +363,8 @@ async def entrypoint(ctx: agents.JobContext):
             replied = await _safe_generate_reply(
                 session,
                 instructions=(
-                    "Continue professionally in one short sentence and ask one polite follow-up question."
+                    "Continue in Hindi unless user chooses another language. "
+                    "Ask a clear land-buying qualification question about preferred location."
                 ),
             )
             if replied:
